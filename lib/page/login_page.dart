@@ -1,9 +1,12 @@
 
 import 'package:flutter/material.dart';
+import 'package:login_firebase/class/auth_firebase.dart';
 import 'package:passwordfield/passwordfield.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
+  
+  final AuthFirebase auth;
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -19,6 +22,9 @@ class _LoginPageState extends State<LoginPage> {
 
   final  formKey = new GlobalKey<FormState>();
   FormType formType = FormType.login;
+  var email = TextEditingController();
+  var password = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +49,13 @@ class _LoginPageState extends State<LoginPage> {
     return [
 
       TextField(
+      controller: email, // obtener input text
       //autofocus: true,
       // pone en mayuscula al inicio de cada palabra
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(
         //TextField de forma BorderCicular
+        
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(2.0)
         ),
@@ -78,6 +86,7 @@ class _LoginPageState extends State<LoginPage> {
               padding: EdgeInsets.only(left: 14),
               
              child: PasswordField(
+               controller: password,
               //suffixIcon:Icon(Icons.lock),
               color: Colors.blue,
               hasFloatingPlaceholder: true,
@@ -150,7 +159,8 @@ class _LoginPageState extends State<LoginPage> {
    }
 
   void validateSubmit(){
-    (formType == FormType.login)?print("login"):print("registar");   
+    (formType == FormType.login)?widget.auth.signIn(email.text, password.text):widget.auth.createUser(email.text, password.text);
+    //(formType == FormType.login)?print("login"):print("registar");   
                                 //si es         // eslse
   }
 
