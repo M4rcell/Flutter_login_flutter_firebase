@@ -1,5 +1,6 @@
 
-
+// la clase es el intermedio entre las paginas Login y home
+//para saber si se esta login o home
 import 'package:flutter/material.dart';
 import 'package:login_firebase/class/auth_firebase.dart';
 import 'package:login_firebase/page/home_page.dart';
@@ -22,9 +23,12 @@ class RootPage extends StatefulWidget {
   }
 
 class _RootPageState extends State<RootPage> {
+  //estado de la persona
   AuthStatus  authStatus= AuthStatus.notSignIn;
+
   //saber si esta logeado
   void initState(){
+    //obtenemos el usuario actual con su ID
     widget.authFirebase.curretUser().then((useId) => 
     
     setState((){

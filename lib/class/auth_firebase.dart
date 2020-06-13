@@ -3,9 +3,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthFirebase{
-
+ 
+ //instancia para autentificacion con firebase
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   
+  //METODOS
   // SIGN SESION
   Future<String> signIn(String email, String password) async {
 
