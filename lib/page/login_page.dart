@@ -4,9 +4,10 @@ import 'package:login_firebase/class/auth_firebase.dart';
 import 'package:passwordfield/passwordfield.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key key}) : super(key: key);
+  LoginPage({Key key,this.auth,this.onSignIn}) : super(key: key);
   
   final AuthFirebase auth;
+  final VoidCallback onSignIn;
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -160,6 +161,8 @@ class _LoginPageState extends State<LoginPage> {
 
   void validateSubmit(){
     (formType == FormType.login)?widget.auth.signIn(email.text, password.text):widget.auth.createUser(email.text, password.text);
+
+    widget.onSignIn();
     //(formType == FormType.login)?print("login"):print("registar");   
                                 //si es         // eslse
   }

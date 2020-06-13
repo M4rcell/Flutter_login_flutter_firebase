@@ -20,6 +20,13 @@ class AuthFirebase{
 
     return user.uid;
   }
+  //Si esta logeado o  no
+  Future<String> curretUser() async {
+
+    FirebaseUser  user = await firebaseAuth.currentUser();
+    return user != null?user.uid:null;
+
+  }
 
   Future<void> signOut(){
     return firebaseAuth.signOut();
