@@ -6,5 +6,5 @@ class Animal{
   String age;
   String image;
 
-  Animal(this.key,this.name,this.age,this.image)
+  Animal(this.key,this.name,this.age,this.image);
 }

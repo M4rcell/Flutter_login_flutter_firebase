@@ -48,24 +48,32 @@ class _LoginPageState extends State<LoginPage> {
 
   List<Widget>formLogin(){
     return [
-
-      TextField(
+      
+      TextFormField(
+      
       controller: email, // obtener input text
       //autofocus: true,
       // pone en mayuscula al inicio de cada palabra
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(
         //TextField de forma BorderCicular
-        
-        border: OutlineInputBorder(
+          border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(2.0)
         ),
       //counterText:'Letras  ${_nombre.length}',
       hintText: 'Ingrese su Email',
       labelText: 'Email',
-     
-      icon: Icon(Icons.account_circle,color: Colors.blue,)
+       
+      icon: Icon(Icons.account_circle,color: Colors.blue,),
+      
       ),
+      validator: (String value) {
+                if (value.isEmpty) {
+                  return 'Please enter some text';
+                }
+                return null;
+              },
+      
       ),
       /* padded(
         child: TextFormField(
@@ -99,6 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide(width: 2, color: Colors.blue)),
               errorMessage: 'must contain special character either . * @ # \$',
+              
         ),)
             
        ],

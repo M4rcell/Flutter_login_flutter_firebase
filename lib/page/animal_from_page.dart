@@ -1,14 +1,19 @@
 
 import 'dart:io';
 
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 //import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_gallery_camera/image_picker_gallery_camera.dart';
+import 'package:login_firebase/class/animal.dart';
 
 class FormAnimal extends StatefulWidget {
-  FormAnimal({Key key,this.titulo}) : super(key: key);
+ // FormAnimal({Key key,this.titulo}) : super(key: key);
   
   final String titulo ;
+  final Animal animal;
+  FormAnimal({this.titulo,this.animal});
 
   @override
   _FormAnimalState createState() => _FormAnimalState();
@@ -19,7 +24,7 @@ class _FormAnimalState extends State<FormAnimal> {
   var nameController= TextEditingController();
   var ageController = TextEditingController();
   File galleryFile;
-
+  String urlImage;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +39,18 @@ class _FormAnimalState extends State<FormAnimal> {
     );
   }
 
-  Widget getFormAnimal(){
+// traer datos DB para modificar
+void initSate(){
+  //verificar se envio el objeto animal
+  if (widget.animal!=null) {
+     nameController.text=widget.animal.name;
+     ageController.text = widget.animal.age;
+  }
+ 
+
+}
+
+Widget getFormAnimal(){
     return Column(
       children: <Widget>[
         TextFormField(
@@ -69,12 +85,69 @@ class _FormAnimalState extends State<FormAnimal> {
       ],
     );
   }
-  
+  //ENVIAR DATOS A FIREBASE
   sendData(){
+   saveFirebase(nameController.text).then((_) {
+   
+     
+     DatabaseReference db = FirebaseDatabase.instance.reference().child("Animal");
+    
+    if (widget.animal!=null){
+     // MODIFICAR ANIMAL
+      db.child(widget.animal.key).set(getAnimal()).then((_) => Navigator.pop(context)); //modificar y regresae al contexto
+       
+    }else{
+      //Crear un nuevo animal
+      db.push().set(getAnimal()).then((_) => Navigator.pop(context));//crear y regresar al home
+
+    }
+   
+     
+   });
+    
 
   }
+  Map<String,dynamic> getAnimal(){
+    Map<String,dynamic> data = new Map();
+    data['name'] = nameController.text;
+    data['age']  = ageController.text;
+    
+   return data;
+  }
+  //Guaradar imagen en el servidor
+  Future<void> saveFirebase(String imageId) async{
+    
+    if (galleryFile != null) {
+      //direcion a guardarse
+      StorageReference reference = FirebaseStorage.instance.ref().child('animal').child(imageId);
+      //guardar en storage la imagen
+      StorageUploadTask uploadTask = reference.putFile(galleryFile);
+      //obtener la url para guardar en DB
+      StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
+      
+      urlImage= (await downloadUrl.ref.getDownloadURL());
+    }
+  }
+
   showImage(){
+    if(galleryFile != null){
     return Image.file(galleryFile);
+    }
+    else{
+      //traer datos de img
+      if(widget.animal!=null){
+        return FadeInImage.assetNetwork(
+          placeholder: null, 
+          image: widget.animal.image,
+          height:800.0 ,
+          width: 700.0,
+        );
+      }
+      else{
+       return Text("Imagen No Selecionado");
+      }
+      
+    }
   }
   Future imageSelectorGallery(ImgSource source) async {//
     var image = await ImagePickerGC.pickImage(

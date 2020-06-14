@@ -24,7 +24,7 @@ class HomePage extends StatelessWidget {
       floatingActionButton:FloatingActionButton(
         onPressed: (){
           Navigator.push(context, MaterialPageRoute(
-            builder: (context) => FormAnimal(titulo: "Nuevo Animal",)            
+            builder: (context) => FormAnimal(titulo: "Nuevo Animal",animal: null,)            
           ));
         },
         shape: StadiumBorder(),
