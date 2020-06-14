@@ -111,7 +111,14 @@ Widget getFormAnimal(){
     Map<String,dynamic> data = new Map();
     data['name'] = nameController.text;
     data['age']  = ageController.text;
+    if (widget.animal!=null && galleryFile==null) {
+      
+    }
+    else{
     
+    data['image']  = urlImage!=null?urlImage:"";
+
+    }
    return data;
   }
   //Guaradar imagen en el servidor
